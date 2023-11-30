@@ -19,26 +19,29 @@ func main() {
 		fmt.Println("Error reading file:", err)
 		return
 	}
+	targetFile := string(content)
 
-	// Dummy implementation: Replace this with actual logic to parse Java file and find dependencies
-	dependencies := findDependencies(string(content), filePath)
+	dependencies := findDependencies(targetFile, filePath)
 
-	// Read and combine dependencies
-	var combinedContent string
-	for _, dep := range dependencies {
-		// println(dep)
-		depContent, err := ioutil.ReadFile(dep)
+	template := ""
+	if _, err := os.Stat("./template/default.txt"); err == nil {
+		b, err := ioutil.ReadFile("./template/default.txt")
 		if err != nil {
-			fmt.Println("Error reading dependency file:", err)
+			fmt.Println("Error reading default file:", err)
 			return
 		}
-		combinedContent += string(depContent) + "\n"
+		template = string(b)
 	}
+	println(template)
+	println(targetFile)
 
-	combinedContent += string(content)
-
-	// Output the combined content
-	// fmt.Println(combinedContent)
+	for _, depPath := range dependencies {
+		fileContent, err := ioutil.ReadFile(depPath)
+		if err != nil {
+			panic("Error reading file: " + depPath)
+		}
+		fmt.Println(string(fileContent))
+	}
 }
 
 func findDependencies(content string, filePath string) []string {
