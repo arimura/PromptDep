@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strings"
 )
@@ -14,7 +13,7 @@ func main() {
 	scanner.Scan()
 	filePath := scanner.Text()
 
-	content, err := ioutil.ReadFile(filePath)
+	content, err := os.ReadFile(filePath)
 	if err != nil {
 		fmt.Println("Error reading file:", err)
 		return
@@ -25,18 +24,16 @@ func main() {
 
 	template := ""
 	if _, err := os.Stat("./template/default.txt"); err == nil {
-		b, err := ioutil.ReadFile("./template/default.txt")
-		if err != nil {
-			fmt.Println("Error reading default file:", err)
-			return
+		b, err := os.ReadFile("./template/default.txt")
+		if err == nil {
+			template = string(b)
 		}
-		template = string(b)
 	}
 	println(template)
 	println(targetFile)
 
 	for _, depPath := range dependencies {
-		fileContent, err := ioutil.ReadFile(depPath)
+		fileContent, err := os.ReadFile(depPath)
 		if err != nil {
 			panic("Error reading file: " + depPath)
 		}
