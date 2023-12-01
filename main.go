@@ -10,7 +10,7 @@ import (
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
-	fmt.Print("Enter the file path: ")
+	fmt.Fprint(os.Stderr, "Enter the file path: ")
 	scanner.Scan()
 	filePath := scanner.Text()
 
@@ -33,8 +33,8 @@ func main() {
 			template = string(b)
 		}
 	}
-	println(template)
-	println(targetFile)
+	fmt.Println(template)
+	fmt.Println(targetFile)
 
 	for _, depPath := range dependencies {
 		fileContent, err := os.ReadFile(depPath)
